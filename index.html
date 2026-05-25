@@ -421,20 +421,7 @@
     .reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group {
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.55s ease, transform 0.55s ease, background 0.2s;
-    }
-    .js-ready .reveal,
-    .js-ready .focus-card,
-    .js-ready .project-card,
-    .js-ready .tl-item,
-    .js-ready .edu-card,
-    .js-ready .skill-group {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    .js-ready #home .reveal {
-      opacity: 1;
-      transform: translateY(0);
+      transition: transform 0.2s ease, background 0.2s;
     }
     .visible { opacity: 1; transform: translateY(0); }
     @media (max-width: 980px) {
@@ -773,12 +760,7 @@
     }
 
     function initReveal() {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      }, { threshold: 0.1 });
-      document.querySelectorAll(".reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group").forEach(el => observer.observe(el));
+      document.querySelectorAll(".reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group").forEach(el => el.classList.add("visible"));
     }
 
     function sendMsg() {
@@ -798,12 +780,8 @@
     document.documentElement.setAttribute("data-theme", savedTheme);
     document.getElementById("theme-btn").textContent = savedTheme === "dark" ? "☼" : "☾";
     setLang(localStorage.getItem("ex-lang") || "en");
-    document.body.classList.add("js-ready");
     initParticles();
     initReveal();
-    setTimeout(() => {
-      document.querySelectorAll(".reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group").forEach(el => el.classList.add("visible"));
-    }, 600);
   </script>
 </body>
 </html>
