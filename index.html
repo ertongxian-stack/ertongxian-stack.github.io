@@ -1,270 +1,809 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Ertong Xian is a content marketing, social media, and creator operations professional based in Glasgow."
-    />
-    <title>Ertong Xian | Content, Social Media & Creator Operations</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ertong Xian | Digital Marketing & Content Operations</title>
+  <meta name="description" content="Portfolio of Ertong Xian, MSc Creative Industries and Cultural Policy student focused on digital marketing, social media, livestreaming, and creator economy.">
+  <meta property="og:title" content="Ertong Xian | Digital Marketing & Content Operations">
+  <meta property="og:description" content="Creative industries postgraduate focused on digital marketing, content operations, livestreaming, and creator economy.">
+  <meta property="og:url" content="https://ertongxian-stack.github.io/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f1712'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='13' font-weight='700' fill='%23d88a4a' text-anchor='middle'%3EEX%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #faf6f0;
+      --bg2: #f2ebe2;
+      --bg3: #e8ddcf;
+      --fg: #1d140d;
+      --fg2: #6d5844;
+      --fg3: #a38d78;
+      --accent: #c76d34;
+      --accent2: #9552b2;
+      --cool: #287b8f;
+      --border: rgba(157, 104, 52, 0.18);
+      --card: rgba(255, 255, 255, 0.72);
+      --card-hover: rgba(255, 255, 255, 0.94);
+      --shadow: 0 18px 52px rgba(82, 50, 24, 0.12);
+      --radius: 12px;
+    }
+    [data-theme="dark"] {
+      --bg: #17120f;
+      --bg2: #211915;
+      --bg3: #2c231d;
+      --fg: #f6ede3;
+      --fg2: #c6ad95;
+      --fg3: #7d6856;
+      --accent: #e28b4e;
+      --accent2: #c68be2;
+      --cool: #78bfd0;
+      --border: rgba(226, 139, 78, 0.20);
+      --card: rgba(255, 255, 255, 0.055);
+      --card-hover: rgba(255, 255, 255, 0.085);
+      --shadow: 0 18px 52px rgba(0, 0, 0, 0.38);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+      transition: background 0.35s, color 0.35s;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(115deg, rgba(199, 109, 52, 0.13), transparent 34%),
+        linear-gradient(250deg, rgba(40, 123, 143, 0.12), transparent 36%),
+        var(--bg);
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 62px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(16px);
+    }
+    .nav-logo {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--fg2);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-controls { display: flex; gap: 10px; align-items: center; }
+    .btn-icon, .lang-btn {
+      height: 34px;
+      min-width: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--fg2);
+      cursor: pointer;
+      font: 700 12px "JetBrains Mono", monospace;
+      transition: transform 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn-icon:hover, .lang-btn:hover, .lang-btn.active {
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    section {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 96px 0;
+      position: relative;
+    }
+    #home {
+      min-height: 100vh;
+      width: 100%;
+      padding: 0 40px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    #particles {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-inner {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) 360px;
+      gap: 70px;
+      align-items: center;
+      z-index: 1;
+    }
+    .eyebrow, .section-label {
+      font: 700 12px "JetBrains Mono", monospace;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .hero h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(52px, 8vw, 104px);
+      line-height: 0.92;
+      letter-spacing: 0;
+    }
+    .hero h1 span {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--accent);
+    }
+    .hero-typing {
+      min-height: 28px;
+      margin: 22px 0 24px;
+      color: var(--fg2);
+      font: 500 17px "JetBrains Mono", monospace;
+    }
+    .cursor {
+      display: inline-block;
+      width: 9px;
+      height: 18px;
+      margin-left: 5px;
+      background: var(--accent);
+      transform: translateY(3px);
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .hero-desc {
+      max-width: 660px;
+      color: var(--fg2);
+      font-size: 18px;
+      line-height: 1.72;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+    .btn-primary, .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+    .btn-outline { color: var(--fg); border: 1px solid var(--border); background: var(--card); }
+    .btn-primary:hover, .btn-outline:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .avatar-card {
+      justify-self: end;
+      width: 340px;
+      aspect-ratio: 1 / 1.22;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .avatar-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .avatar-badge {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      color: var(--fg);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .section-title {
+      margin: 12px 0 34px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+    .section-title span { color: var(--accent); }
+    .lead-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .panel, .focus-card, .project-card, .edu-card, .skill-group, .tl-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .panel { padding: 28px; }
+    .panel p {
+      color: var(--fg2);
+      line-height: 1.78;
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    .panel p:last-child { margin-bottom: 0; }
+    .stat-list { display: grid; gap: 12px; }
+    .stat {
+      padding: 16px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--bg2) 72%, transparent);
+      border: 1px solid var(--border);
+    }
+    .stat strong { display: block; margin-bottom: 5px; color: var(--fg); }
+    .stat span { color: var(--fg2); font-size: 14px; line-height: 1.55; }
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .focus-card {
+      min-height: 205px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .focus-card:hover, .project-card:hover { transform: translateY(-4px); background: var(--card-hover); }
+    .focus-icon { color: var(--cool); font: 700 24px "JetBrains Mono", monospace; }
+    .focus-card h3 { font-size: 18px; line-height: 1.25; }
+    .focus-card p { color: var(--fg2); font-size: 14px; line-height: 1.62; }
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 18px;
+    }
+    .tl-item {
+      padding: 24px 26px;
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 26px;
+    }
+    .tl-period { color: var(--accent); font: 700 13px "JetBrains Mono", monospace; }
+    .tl-role { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .tl-company { color: var(--fg2); font-weight: 700; margin-bottom: 10px; }
+    .tl-desc { color: var(--fg2); line-height: 1.68; font-size: 15px; }
+    .projects-grid, .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .project-card {
+      overflow: hidden;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .project-top {
+      min-height: 148px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-end;
+      background:
+        linear-gradient(135deg, rgba(199, 109, 52, 0.20), rgba(40, 123, 143, 0.16)),
+        var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .project-badge {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 7px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font: 700 12px "JetBrains Mono", monospace;
+    }
+    .project-body { padding: 22px; }
+    .project-title { font-size: 18px; line-height: 1.35; font-weight: 700; margin-bottom: 8px; }
+    .project-sub { color: var(--fg3); font-size: 13px; margin-bottom: 13px; }
+    .project-desc { color: var(--fg2); line-height: 1.66; font-size: 14px; }
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .edu-card { padding: 24px; }
+    .edu-period { color: var(--accent); font: 700 13px "JetBrains Mono", monospace; margin-bottom: 14px; }
+    .edu-school { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .edu-degree { color: var(--fg2); line-height: 1.6; }
+    .skill-group { padding: 22px; }
+    .skill-cat { color: var(--accent); font: 700 13px "JetBrains Mono", monospace; margin-bottom: 14px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag {
+      padding: 7px 10px;
+      border-radius: 7px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--fg2);
+      font-size: 13px;
+    }
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 32px;
+    }
+    .contact-links { display: grid; gap: 12px; margin-top: 22px; }
+    .contact-link {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      color: var(--fg2);
+      text-decoration: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .contact-link:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+    .contact-icon { color: var(--accent); font: 700 13px "JetBrains Mono", monospace; min-width: 28px; }
+    .contact-form {
+      display: grid;
+      gap: 14px;
+      padding: 26px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .form-label { display: block; margin-bottom: 7px; color: var(--fg2); font-size: 13px; font-weight: 700; }
+    .form-input, .form-textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg2);
+      color: var(--fg);
+      font: 15px "Space Grotesk", Arial, sans-serif;
+      padding: 12px 13px;
+      outline: none;
+    }
+    .form-textarea { min-height: 132px; resize: vertical; }
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+    .form-submit {
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    footer {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 30px 0 46px;
+      color: var(--fg3);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s ease, transform 0.55s ease, background 0.2s;
+    }
+    .js-ready .reveal,
+    .js-ready .focus-card,
+    .js-ready .project-card,
+    .js-ready .tl-item,
+    .js-ready .edu-card,
+    .js-ready .skill-group {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .js-ready #home .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 980px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      #home { padding: 100px 24px 72px; }
+      .hero-inner, .lead-grid, .contact-wrap { grid-template-columns: 1fr; }
+      .avatar-card { justify-self: start; width: min(340px, 100%); }
+      .focus-grid, .projects-grid, .skills-grid, .edu-grid { grid-template-columns: 1fr 1fr; }
+      .tl-item { grid-template-columns: 1fr; gap: 10px; }
+    }
+    @media (max-width: 640px) {
+      section { width: calc(100% - 32px); padding: 70px 0; }
+      #home { padding-left: 16px; padding-right: 16px; }
+      .focus-grid, .projects-grid, .skills-grid, .edu-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 56px; }
+      .hero-desc { font-size: 16px; }
+      footer { width: calc(100% - 32px); flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="nav-logo" href="#home">ertong.xian</a>
+    <ul class="nav-links">
+      <li><a href="#about" data-i18n="nav_about">About</a></li>
+      <li><a href="#focus" data-i18n="nav_focus">Focus</a></li>
+      <li><a href="#experience" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="#skills" data-i18n="nav_skills">Skills</a></li>
+      <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-controls">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('zh')">中</button>
+      <button class="btn-icon" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">☾</button>
+    </div>
+  </nav>
 
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="Ertong Xian home">ex.dev</a>
-      <nav class="nav" aria-label="Main navigation">
-        <a href="#news">News</a>
-        <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
-        <a href="#education">Education</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <button class="theme-toggle" type="button" aria-label="Toggle dark and light mode">
-        <span class="theme-icon">☀</span>
-      </button>
-    </header>
+  <section id="home">
+    <canvas id="particles"></canvas>
+    <div class="hero-inner">
+      <div class="hero reveal">
+        <div class="eyebrow" data-i18n="hero_tag">Digital Marketing · Social Media · Livestreaming · Content Operations</div>
+        <h1>Ertong<br><span>Xian.</span></h1>
+        <div class="hero-typing"><span id="typing-text"></span><span class="cursor"></span></div>
+        <p class="hero-desc" data-i18n="hero_desc">MSc Creative Industries and Cultural Policy student at the University of Glasgow, focused on digital marketing, content operations, social media strategy, livestreaming, and the creator economy.</p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="#contact" data-i18n="btn_contact">Get in Touch</a>
+          <a class="btn-outline" href="https://www.linkedin.com/in/ertong-xian-58b48b391" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+      <div class="avatar-card reveal">
+        <img src="profile.jpg" alt="Portrait of Ertong Xian">
+        <div class="avatar-badge" data-i18n="avatar_badge">@ University of Glasgow · MSc</div>
+      </div>
+    </div>
+  </section>
 
-    <main id="top">
-      <section class="hero section-shell" aria-label="Introduction">
-        <div class="hero-copy">
-          <p class="eyebrow">Content Marketing / Social Media / Creator Operations</p>
-          <h1>Ertong<br />Xian.</h1>
-          <p class="hero-text">
-            MSc Creative Industries and Cultural Policy student at the University of Glasgow, building
-            audience-first content across short-form video, livestreaming, social platforms, and creator
-            operations.
-          </p>
-          <div class="hero-actions">
-            <a class="button primary" href="assets/Ertong_Xian_CV.docx" download>Download CV</a>
-            <a class="button secondary" href="#contact">Get in Touch</a>
-            <a class="button ghost" href="https://www.linkedin.com/in/ertong-xian-58b48b391" target="_blank" rel="noreferrer">LinkedIn</a>
-          </div>
-        </div>
-        <div class="portrait-wrap" aria-label="Portrait of Ertong Xian">
-          <img src="assets/ertong-xian.jpg" alt="Portrait of Ertong Xian" />
-          <div class="portrait-card">
-            <span>EX</span>
-            <p>@ University of Glasgow</p>
-          </div>
-        </div>
-      </section>
+  <section id="about">
+    <div class="section-label" data-i18n="section_about">About Me</div>
+    <h2 class="section-title reveal" data-i18n="about_title">Creative industries background, <span>platform-first</span> marketing mindset.</h2>
+    <div class="lead-grid">
+      <div class="panel reveal">
+        <p data-i18n="about_p1">I am a postgraduate student in Creative Industries and Cultural Policy at the University of Glasgow. My work sits between digital marketing, content production, audience research, and platform-based communication.</p>
+        <p data-i18n="about_p2">Through internships in audio and online education platforms, I have supported creator selection, livestreaming operations, content planning, scripting, editing, data tracking, and operational reporting.</p>
+        <p data-i18n="about_p3">I am looking for entry-level roles or internships in the UK across digital marketing, content operations, social media, creator partnerships, and platform-related marketing.</p>
+      </div>
+      <div class="stat-list reveal">
+        <div class="stat"><strong data-i18n="stat1_title">Academic focus</strong><span data-i18n="stat1_text">Creative industries, digital marketing strategy, creator economy, livestreaming, and platform culture.</span></div>
+        <div class="stat"><strong data-i18n="stat2_title">Platform perspective</strong><span data-i18n="stat2_text">Cross-cultural understanding of TikTok, Douyin, Xiaohongshu/RED, Bilibili, WeChat, Weibo, and Instagram.</span></div>
+        <div class="stat"><strong data-i18n="stat3_title">Working style</strong><span data-i18n="stat3_text">Clear communicator, detail-oriented operator, bilingual in Mandarin and English.</span></div>
+      </div>
+    </div>
+  </section>
 
-      <section id="news" class="section-shell split-section">
-        <div class="section-kicker">
-          <span>Latest</span>
-          <h2>What's New</h2>
-        </div>
-        <div class="news-list">
-          <article>
-            <time>2026.02</time>
-            <p>Started freelance social media content support for an independent finance and digital assets creator in Glasgow / remote.</p>
-          </article>
-          <article>
-            <time>2025.09</time>
-            <p>Began MSc Creative Industries and Cultural Policy at the University of Glasgow.</p>
-          </article>
-          <article>
-            <time>2025</time>
-            <p>Grew lifestyle and culture-related Xiaohongshu / RED content to 19,000+ total likes and saves.</p>
-          </article>
-          <article>
-            <time>2024.11</time>
-            <p>Joined Ximalaya's creator traffic-support project, working across creator tiering, tracking, and weekly performance reports.</p>
-          </article>
-        </div>
-      </section>
+  <section id="focus">
+    <div class="section-label" data-i18n="section_focus">Focus Areas</div>
+    <h2 class="section-title reveal" data-i18n="focus_title">Where I want to <span>grow</span>.</h2>
+    <div class="focus-grid">
+      <div class="focus-card"><div class="focus-icon">01</div><h3 data-i18n="focus1_title">Digital Marketing</h3><p data-i18n="focus1_text">Campaign support, audience insight, content planning, and platform-native messaging for early-career marketing roles.</p></div>
+      <div class="focus-card"><div class="focus-icon">02</div><h3 data-i18n="focus2_title">Social Media Strategy</h3><p data-i18n="focus2_text">Short-form video trends, content calendars, captions, engagement signals, and community-facing communication.</p></div>
+      <div class="focus-card"><div class="focus-icon">03</div><h3 data-i18n="focus3_title">Livestreaming Operations</h3><p data-i18n="focus3_text">Streamer coordination, session preparation, live interaction design, performance monitoring, and post-session review.</p></div>
+      <div class="focus-card"><div class="focus-icon">04</div><h3 data-i18n="focus4_title">Creator Economy</h3><p data-i18n="focus4_text">Creator discovery, creator support, platform governance, authenticity, monetisation, and audience trust.</p></div>
+    </div>
+  </section>
 
-      <section id="projects" class="section-shell">
-        <div class="section-kicker">
-          <span>Work</span>
-          <h2>Selected Projects</h2>
-        </div>
-        <div class="project-grid">
-          <article class="project-card">
-            <div class="project-visual red">
-              <span>19K+</span>
-            </div>
-            <p class="tag">Social Media</p>
-            <h3>Xiaohongshu / RED Content Practice</h3>
-            <p class="meta">Lifestyle & culture / 2025 - Present</p>
-            <p>
-              Created platform-native graphic and text content, using trends, audience feedback, and engagement signals to refine topics,
-              captions, and visual presentation.
-            </p>
-          </article>
+  <section id="experience">
+    <div class="section-label" data-i18n="section_exp">Selected Experience</div>
+    <h2 class="section-title reveal" data-i18n="exp_title">Content, creator, and <span>livestreaming</span> work.</h2>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-period">Feb 2026 - Present</div><div><div class="tl-role" data-i18n="exp1_role">Freelance Social Media Content Assistant</div><div class="tl-company">Glasgow / Remote</div><div class="tl-desc" data-i18n="exp1_desc">Support topic research and content planning for an independent creator account, helping structure short-form content themes, captions, posting ideas, and audience-response reviews.</div></div></div>
+      <div class="tl-item"><div class="tl-period">Nov 2024 - Jan 2025</div><div><div class="tl-role" data-i18n="exp2_role">Content & Creator Operations Intern</div><div class="tl-company">Ximalaya Inc. · Shanghai</div><div class="tl-desc" data-i18n="exp2_desc">Supported a creator traffic-support project through creator selection, tiering, performance tracking, Excel-based reporting, internal dashboard data cleaning, and SOP documentation.</div></div></div>
+      <div class="tl-item"><div class="tl-period">Feb 2024 - Apr 2024</div><div><div class="tl-role" data-i18n="exp3_role">Live Streaming Operations Intern</div><div class="tl-company">Guanghe Xinzhi · Beijing</div><div class="tl-desc" data-i18n="exp3_desc">Coordinated daily livestreaming operations for around 10 streamers across 6 rooms, supported content planning and interactive activities, and monitored attendance, sales, and engagement data.</div></div></div>
+      <div class="tl-item"><div class="tl-period">Mar 2022 - Oct 2023</div><div><div class="tl-role" data-i18n="exp4_role">Science Communication Intern</div><div class="tl-company">Henan Association for Science and Technology</div><div class="tl-desc" data-i18n="exp4_desc">Managed scripting, recording, and audio editing for a public radio programme, while researching audience preferences across digital platforms to improve content targeting.</div></div></div>
+    </div>
+  </section>
 
-          <article class="project-card">
-            <div class="project-visual amber">
-              <span>6 Rooms</span>
-            </div>
-            <p class="tag">Livestreaming</p>
-            <h3>Online Education Live Operations</h3>
-            <p class="meta">Guanghe Xinzhi / Beijing</p>
-            <p>
-              Supported around 10 streamers across 6 live rooms, helping coordinate content, interaction design, delivery feedback, and
-              sales / engagement monitoring.
-            </p>
-          </article>
+  <section id="projects">
+    <div class="section-label" data-i18n="section_projects">Projects</div>
+    <h2 class="section-title reveal" data-i18n="project_title">Selected <span>projects</span>.</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-top"><div class="project-badge" data-i18n="proj1_badge">Dissertation</div></div>
+        <div class="project-body"><div class="project-title" data-i18n="proj1_title">Authenticity and Commercialised Livestreaming on Douyin</div><div class="project-sub">University of Glasgow · MSc dissertation focus</div><div class="project-desc" data-i18n="proj1_desc">Researching how Douyin creators build audience trust, perform authenticity, and respond to platform traffic, monetisation, and governance pressures in livestream e-commerce.</div></div>
+      </div>
+      <div class="project-card">
+        <div class="project-top"><div class="project-badge" data-i18n="proj2_badge">Social Media</div></div>
+        <div class="project-body"><div class="project-title" data-i18n="proj2_title">Short-Form Video & Xiaohongshu/RED Content</div><div class="project-sub">Personal content projects</div><div class="project-desc" data-i18n="proj2_desc">Created lifestyle and culture-related content across Chinese social platforms, using audience feedback and engagement performance to adjust topics, captions, and visual presentation.</div></div>
+      </div>
+      <div class="project-card">
+        <div class="project-top"><div class="project-badge" data-i18n="proj3_badge">Competition</div></div>
+        <div class="project-body"><div class="project-title" data-i18n="proj3_title">National Advertising Art Design Competition</div><div class="project-sub">Luoyang Normal University · 2023</div><div class="project-desc" data-i18n="proj3_desc">Led a small team to produce a 60-second brand advertisement, from audience and competitor research to scripting, filming, and editing. Awarded University-level Third Prize.</div></div>
+      </div>
+    </div>
+  </section>
 
-          <article class="project-card">
-            <div class="project-visual blue">
-              <span>60+</span>
-            </div>
-            <p class="tag">Audio & Editorial</p>
-            <h3>Voice of Science Communication Programme</h3>
-            <p class="meta">Henan Association for Science and Technology</p>
-            <p>
-              Managed scripting, recording, and audio editing for a public radio programme, producing 60+ articles and 30 audio-visual
-              pieces with 10,000+ user saves on Qingting FM.
-            </p>
-          </article>
-          <article class="project-card">
-            <div class="project-visual green">
-              <span>3rd</span>
-            </div>
-            <p class="tag">Competition</p>
-            <h3>60-second Brand Advertisement</h3>
-            <p class="meta">National Advertising Art Design Competition</p>
-            <p>
-              Led a student team from audience research and creative concept through scripting, filming, and editing, earning a
-              university-level Third Prize.
-            </p>
-          </article>
-        </div>
-      </section>
+  <section id="education">
+    <div class="section-label" data-i18n="section_edu">Education</div>
+    <h2 class="section-title reveal" data-i18n="edu_title">Academic <span>background</span>.</h2>
+    <div class="edu-grid">
+      <div class="edu-card"><div class="edu-period">Sept 2025 - Dec 2026 expected</div><div class="edu-school">University of Glasgow</div><div class="edu-degree" data-i18n="edu1_degree">MSc Creative Industries and Cultural Policy. Relevant coursework includes Digital Marketing Strategy, Project Management, Research Methods, and Creative Lives and Cultural Industries.</div></div>
+      <div class="edu-card"><div class="edu-period">Sept 2021 - Jun 2025</div><div class="edu-school">Luoyang Normal University</div><div class="edu-degree" data-i18n="edu2_degree">BA Broadcasting and Hosting Arts. Key modules include Journalism, Communication Studies, Camera & Non-linear Editing, and Convergent Media Live Streaming Practice.</div></div>
+    </div>
+  </section>
 
-      <section id="experience" class="section-shell split-section">
-        <div class="section-kicker">
-          <span>Career</span>
-          <h2>Experience Timeline</h2>
-        </div>
-        <div class="timeline">
-          <article class="timeline-item">
-            <time>2026.02 - Present</time>
-            <h3>Freelance Social Media Content Assistant</h3>
-            <p class="company">Glasgow / Remote</p>
-            <p>Research trends, develop short-form content angles, draft captions, and review engagement signals for an independent creator account.</p>
-          </article>
-          <article class="timeline-item">
-            <time>2024.11 - 2025.01</time>
-            <h3>Content & Creator Operations Intern</h3>
-            <p class="company">Ximalaya Inc. / Shanghai</p>
-            <p>Supported creator selection, tiering, Excel tracking, data cleaning, and weekly comparison reports for a creator traffic-support project.</p>
-          </article>
-          <article class="timeline-item">
-            <time>2024.02 - 2024.04</time>
-            <h3>Live Streaming Operations Intern</h3>
-            <p class="company">Guanghe Xinzhi / Beijing</p>
-            <p>Planned interactive livestream activities and supported streamer coordination as monthly team sales grew from RMB 1M to over RMB 3M.</p>
-          </article>
-          <article class="timeline-item">
-            <time>2024.04 - 2024.06</time>
-            <h3>On-Camera Reporter Intern</h3>
-            <p class="company">Nanyang Broadcasting and Television Station</p>
-            <p>Conducted on-location interviews and contributed to programme planning, filming, and post-production under regular broadcast deadlines.</p>
-          </article>
-          <article class="timeline-item">
-            <time>2022.03 - 2023.10</time>
-            <h3>Science Communication Intern</h3>
-            <p class="company">Henan Association for Science and Technology</p>
-            <p>Produced public science content across audio, editorial, and platform formats while researching audience preferences across digital channels.</p>
-          </article>
-        </div>
-      </section>
+  <section id="skills">
+    <div class="section-label" data-i18n="section_skills">Skills</div>
+    <h2 class="section-title reveal" data-i18n="skills_title">Skills & <span>toolkit</span>.</h2>
+    <div class="skills-grid">
+      <div class="skill-group"><div class="skill-cat" data-i18n="skill_cat1">Content & Communication</div><div class="skill-tags"><span class="skill-tag">Content planning</span><span class="skill-tag">Copywriting</span><span class="skill-tag">Scripting</span><span class="skill-tag">Localisation</span><span class="skill-tag">Audience research</span></div></div>
+      <div class="skill-group"><div class="skill-cat" data-i18n="skill_cat2">Operations & Analytics</div><div class="skill-tags"><span class="skill-tag">Creator support</span><span class="skill-tag">Livestream coordination</span><span class="skill-tag">Excel</span><span class="skill-tag">VLOOKUP</span><span class="skill-tag">Pivot Tables</span><span class="skill-tag">SOPs</span></div></div>
+      <div class="skill-group"><div class="skill-cat" data-i18n="skill_cat3">Platforms & Tools</div><div class="skill-tags"><span class="skill-tag">TikTok</span><span class="skill-tag">Douyin</span><span class="skill-tag">Xiaohongshu/RED</span><span class="skill-tag">Bilibili</span><span class="skill-tag">CapCut</span><span class="skill-tag">Canva</span><span class="skill-tag">Photoshop</span></div></div>
+    </div>
+  </section>
 
-      <section id="education" class="section-shell education-section">
-        <div class="section-kicker">
-          <span>Academia</span>
-          <h2>Education</h2>
+  <section id="contact">
+    <div class="section-label" data-i18n="section_contact">Contact</div>
+    <h2 class="section-title reveal" data-i18n="contact_title">Let's <span>connect</span>.</h2>
+    <div class="contact-wrap">
+      <div class="panel reveal">
+        <p data-i18n="contact_desc">I am open to entry-level opportunities and internships in digital marketing, content operations, social media, creator operations, and platform-related marketing roles in the UK.</p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:ertongxian@gmail.com"><span class="contact-icon">MAIL</span>ertongxian@gmail.com</a>
+          <a class="contact-link" href="https://www.linkedin.com/in/ertong-xian-58b48b391" target="_blank" rel="noopener noreferrer"><span class="contact-icon">IN</span>linkedin.com/in/ertong-xian-58b48b391</a>
         </div>
-        <div class="education-grid">
-          <article>
-            <time>2025 - 2026</time>
-            <h3>University of Glasgow</h3>
-            <p>MSc Creative Industries and Cultural Policy</p>
-            <p class="muted">Digital Marketing Strategy / Project Management / Research Methods</p>
-          </article>
-          <article>
-            <time>2021 - 2025</time>
-            <h3>Luoyang Normal University</h3>
-            <p>BA Broadcasting and Hosting Arts / GPA 3.57 / 4.0</p>
-            <p class="muted">Journalism / Communication Studies / Camera & Non-linear Editing / Convergent Media Live Streaming Practice</p>
-          </article>
-        </div>
-      </section>
+      </div>
+      <div class="contact-form reveal">
+        <div><label class="form-label" for="f-name" data-i18n="form_name">Name</label><input class="form-input" type="text" id="f-name" placeholder="Your name"></div>
+        <div><label class="form-label" for="f-email" data-i18n="form_email">Email</label><input class="form-input" type="email" id="f-email" placeholder="your@email.com"></div>
+        <div><label class="form-label" for="f-msg" data-i18n="form_msg">Message</label><textarea class="form-textarea" id="f-msg" placeholder="Hello, I'd like to connect..."></textarea></div>
+        <button class="form-submit" onclick="sendMsg()" data-i18n="form_send">Send Message</button>
+      </div>
+    </div>
+  </section>
 
-      <section class="section-shell skills-section">
-        <div class="section-kicker">
-          <span>Tools</span>
-          <h2>Skills & Stack</h2>
-        </div>
-        <div class="skills-grid">
-          <article>
-            <h3>Content & Editing</h3>
-            <p>CapCut / Canva / Adobe Audition / Photoshop / After Effects / EDIUS</p>
-          </article>
-          <article>
-            <h3>Social Media</h3>
-            <p>Platform-native captions / Content planning / Student-facing storytelling / Brand tone / Sales messaging</p>
-          </article>
-          <article>
-            <h3>Digital & Analytics</h3>
-            <p>Excel / VLOOKUP / Pivot Tables / Platform dashboards / Audience reporting / Performance tracking</p>
-          </article>
-          <article>
-            <h3>Languages</h3>
-            <p>Mandarin Chinese native / English professional working proficiency</p>
-          </article>
-        </div>
-      </section>
+  <footer>
+    <span>Ertong Xian</span>
+    <span>Digital Marketing · Social Media · Creator Economy · 2026</span>
+  </footer>
 
-      <section id="contact" class="section-shell contact-section">
-        <div class="section-kicker">
-          <span>Connect</span>
-          <h2>Get in Touch</h2>
-        </div>
-        <div class="contact-content">
-          <p>
-            I am excited about opportunities where content, platforms, and audience insight come together, especially in content marketing,
-            social media, digital marketing, and creator operations.
-          </p>
-          <div class="contact-links">
-            <a href="mailto:ertongxian@gmail.com">ertongxian@gmail.com</a>
-            <a href="tel:+447352199497">+44 07352 199497</a>
-            <a href="https://www.linkedin.com/in/ertong-xian-58b48b391" target="_blank" rel="noreferrer">LinkedIn</a>
-          </div>
-          <form class="contact-form" action="mailto:ertongxian@gmail.com" method="post" enctype="text/plain">
-            <label>
-              <span>Name</span>
-              <input name="name" autocomplete="name" />
-            </label>
-            <label>
-              <span>Email</span>
-              <input name="email" type="email" autocomplete="email" />
-            </label>
-            <label>
-              <span>Message</span>
-              <textarea name="message" rows="4"></textarea>
-            </label>
-            <button type="submit">Send Message</button>
-          </form>
-        </div>
-      </section>
-    </main>
+  <script>
+    const i18n = {
+      en: {
+        nav_about: "About", nav_focus: "Focus", nav_experience: "Experience", nav_projects: "Projects", nav_skills: "Skills", nav_contact: "Contact",
+        hero_tag: "Digital Marketing · Social Media · Livestreaming · Content Operations",
+        hero_desc: "MSc Creative Industries and Cultural Policy student at the University of Glasgow, focused on digital marketing, content operations, social media strategy, livestreaming, and the creator economy.",
+        btn_contact: "Get in Touch", avatar_badge: "@ University of Glasgow · MSc",
+        section_about: "About Me", about_title: "Creative industries background, <span>platform-first</span> marketing mindset.",
+        about_p1: "I am a postgraduate student in Creative Industries and Cultural Policy at the University of Glasgow. My work sits between digital marketing, content production, audience research, and platform-based communication.",
+        about_p2: "Through internships in audio and online education platforms, I have supported creator selection, livestreaming operations, content planning, scripting, editing, data tracking, and operational reporting.",
+        about_p3: "I am looking for entry-level roles or internships in the UK across digital marketing, content operations, social media, creator partnerships, and platform-related marketing.",
+        stat1_title: "Academic focus", stat1_text: "Creative industries, digital marketing strategy, creator economy, livestreaming, and platform culture.",
+        stat2_title: "Platform perspective", stat2_text: "Cross-cultural understanding of TikTok, Douyin, Xiaohongshu/RED, Bilibili, WeChat, Weibo, and Instagram.",
+        stat3_title: "Working style", stat3_text: "Clear communicator, detail-oriented operator, bilingual in Mandarin and English.",
+        section_focus: "Focus Areas", focus_title: "Where I want to <span>grow</span>.",
+        focus1_title: "Digital Marketing", focus1_text: "Campaign support, audience insight, content planning, and platform-native messaging for early-career marketing roles.",
+        focus2_title: "Social Media Strategy", focus2_text: "Short-form video trends, content calendars, captions, engagement signals, and community-facing communication.",
+        focus3_title: "Livestreaming Operations", focus3_text: "Streamer coordination, session preparation, live interaction design, performance monitoring, and post-session review.",
+        focus4_title: "Creator Economy", focus4_text: "Creator discovery, creator support, platform governance, authenticity, monetisation, and audience trust.",
+        section_exp: "Selected Experience", exp_title: "Content, creator, and <span>livestreaming</span> work.",
+        exp1_role: "Freelance Social Media Content Assistant", exp1_desc: "Support topic research and content planning for an independent creator account, helping structure short-form content themes, captions, posting ideas, and audience-response reviews.",
+        exp2_role: "Content & Creator Operations Intern", exp2_desc: "Supported a creator traffic-support project through creator selection, tiering, performance tracking, Excel-based reporting, internal dashboard data cleaning, and SOP documentation.",
+        exp3_role: "Live Streaming Operations Intern", exp3_desc: "Coordinated daily livestreaming operations for around 10 streamers across 6 rooms, supported content planning and interactive activities, and monitored attendance, sales, and engagement data.",
+        exp4_role: "Science Communication Intern", exp4_desc: "Managed scripting, recording, and audio editing for a public radio programme, while researching audience preferences across digital platforms to improve content targeting.",
+        section_projects: "Projects", project_title: "Selected <span>projects</span>.",
+        proj1_badge: "Dissertation", proj1_title: "Authenticity and Commercialised Livestreaming on Douyin", proj1_desc: "Researching how Douyin creators build audience trust, perform authenticity, and respond to platform traffic, monetisation, and governance pressures in livestream e-commerce.",
+        proj2_badge: "Social Media", proj2_title: "Short-Form Video & Xiaohongshu/RED Content", proj2_desc: "Created lifestyle and culture-related content across Chinese social platforms, using audience feedback and engagement performance to adjust topics, captions, and visual presentation.",
+        proj3_badge: "Competition", proj3_title: "National Advertising Art Design Competition", proj3_desc: "Led a small team to produce a 60-second brand advertisement, from audience and competitor research to scripting, filming, and editing. Awarded University-level Third Prize.",
+        section_edu: "Education", edu_title: "Academic <span>background</span>.",
+        edu1_degree: "MSc Creative Industries and Cultural Policy. Relevant coursework includes Digital Marketing Strategy, Project Management, Research Methods, and Creative Lives and Cultural Industries.",
+        edu2_degree: "BA Broadcasting and Hosting Arts. Key modules include Journalism, Communication Studies, Camera & Non-linear Editing, and Convergent Media Live Streaming Practice.",
+        section_skills: "Skills", skills_title: "Skills & <span>toolkit</span>.",
+        skill_cat1: "Content & Communication", skill_cat2: "Operations & Analytics", skill_cat3: "Platforms & Tools",
+        section_contact: "Contact", contact_title: "Let's <span>connect</span>.",
+        contact_desc: "I am open to entry-level opportunities and internships in digital marketing, content operations, social media, creator operations, and platform-related marketing roles in the UK.",
+        form_name: "Name", form_email: "Email", form_msg: "Message", form_send: "Send Message",
+        typing_roles: ["Digital Marketing", "Social Media Strategy", "Livestreaming Operations", "Creator Economy", "Content Operations"]
+      },
+      zh: {
+        nav_about: "关于我", nav_focus: "方向", nav_experience: "经历", nav_projects: "项目", nav_skills: "技能", nav_contact: "联系",
+        hero_tag: "数字营销 · 社交媒体 · 直播运营 · 内容运营",
+        hero_desc: "格拉斯哥大学 Creative Industries and Cultural Policy 硕士在读，关注数字营销、内容运营、社交媒体策略、直播与创作者经济。",
+        btn_contact: "联系我", avatar_badge: "@ 格拉斯哥大学 · 硕士",
+        section_about: "关于我", about_title: "创意产业背景，<span>平台导向</span>的营销视角。",
+        about_p1: "我目前就读于格拉斯哥大学 Creative Industries and Cultural Policy 硕士项目，兴趣集中在数字营销、内容生产、受众研究与平台传播。",
+        about_p2: "在音频平台和在线教育相关实习中，我参与过创作者筛选、直播运营、内容策划、脚本与剪辑、数据追踪和运营报告整理。",
+        about_p3: "我希望在英国寻找数字营销、内容运营、社交媒体、创作者合作或平台相关营销方向的初级岗位或实习机会。",
+        stat1_title: "学术关注", stat1_text: "创意产业、数字营销策略、创作者经济、直播与平台文化。",
+        stat2_title: "平台理解", stat2_text: "理解 TikTok、抖音、小红书、Bilibili、微信、微博和 Instagram 等中英平台生态。",
+        stat3_title: "工作方式", stat3_text: "沟通清晰，注重细节，具备普通话和英语双语能力。",
+        section_focus: "关注方向", focus_title: "我希望持续<span>成长</span>的领域。",
+        focus1_title: "数字营销", focus1_text: "关注 campaign 支持、受众洞察、内容规划和适合平台语境的营销表达。",
+        focus2_title: "社交媒体策略", focus2_text: "关注短视频趋势、内容日历、标题文案、互动数据和面向社群的沟通。",
+        focus3_title: "直播运营", focus3_text: "包括主播协调、开播准备、直播互动设计、数据监测和场次复盘。",
+        focus4_title: "创作者经济", focus4_text: "关注创作者发现与支持、平台规则、真实性表达、商业化和受众信任。",
+        section_exp: "精选经历", exp_title: "内容、创作者与<span>直播</span>相关经历。",
+        exp1_role: "自由职业社交媒体内容助理", exp1_desc: "为独立创作者账号支持选题研究和内容规划，协助梳理短视频主题、标题文案、发布想法与受众反馈。",
+        exp2_role: "内容与创作者运营实习生", exp2_desc: "参与创作者流量扶持项目，支持创作者筛选、分层、表现追踪、Excel 报告、内部数据清理和 SOP 文档整理。",
+        exp3_role: "直播运营实习生", exp3_desc: "协助约 10 位主播、6 个直播间的日常直播运营，支持内容策划、互动活动，并跟进出勤、销售和互动数据。",
+        exp4_role: "科普传播实习生", exp4_desc: "负责公共广播节目的脚本、录制和音频剪辑，同时研究不同数字平台上的受众偏好以优化内容定位。",
+        section_projects: "项目", project_title: "精选<span>项目</span>。",
+        proj1_badge: "毕业论文", proj1_title: "抖音商业化直播中的真实性表达", proj1_desc: "研究抖音直播电商中创作者如何建立受众信任、表演真实性，并回应平台流量、商业化和治理压力。",
+        proj2_badge: "社交媒体", proj2_title: "短视频与小红书内容创作", proj2_desc: "围绕生活方式和文化内容在中文社交平台进行图文与短视频创作，并根据受众反馈和互动表现调整选题、文案与视觉呈现。",
+        proj3_badge: "竞赛", proj3_title: "全国大学生广告艺术大赛", proj3_desc: "带领小组完成 60 秒品牌广告，从受众与竞品研究到脚本、拍摄和剪辑，获得校级三等奖。",
+        section_edu: "教育背景", edu_title: "学术<span>背景</span>。",
+        edu1_degree: "Creative Industries and Cultural Policy 硕士。相关课程包括 Digital Marketing Strategy、Project Management、Research Methods 和 Creative Lives and Cultural Industries。",
+        edu2_degree: "播音与主持艺术本科。核心课程包括新闻学、传播学、摄像与非线性编辑、融合媒体直播实践。",
+        section_skills: "技能", skills_title: "技能与<span>工具</span>。",
+        skill_cat1: "内容与传播", skill_cat2: "运营与分析", skill_cat3: "平台与工具",
+        section_contact: "联系方式", contact_title: "欢迎<span>联系</span>。",
+        contact_desc: "我正在寻找英国数字营销、内容运营、社交媒体、创作者运营或平台相关营销方向的初级岗位和实习机会。",
+        form_name: "姓名", form_email: "邮箱", form_msg: "留言", form_send: "发送邮件",
+        typing_roles: ["数字营销", "社交媒体策略", "直播运营", "创作者经济", "内容运营"]
+      }
+    };
 
-    <footer class="site-footer">
-      <span>Ertong Xian / Designed with intention / 2026</span>
-    </footer>
+    let currentLang = "en";
+    let typingTimer;
 
-    <script src="script.js"></script>
-  </body>
+    function setLang(lang) {
+      currentLang = lang;
+      document.documentElement.setAttribute("data-lang", lang);
+      document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add("active");
+      const t = i18n[lang];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      startTyping();
+      localStorage.setItem("ex-lang", lang);
+    }
+
+    function startTyping() {
+      clearTimeout(typingTimer);
+      const el = document.getElementById("typing-text");
+      const roles = i18n[currentLang].typing_roles;
+      let ri = 0;
+      let ci = 0;
+      let deleting = false;
+      el.textContent = "";
+      function tick() {
+        const word = roles[ri];
+        if (!deleting) {
+          el.textContent = word.slice(0, ci + 1);
+          ci++;
+          if (ci === word.length) {
+            deleting = true;
+            typingTimer = setTimeout(tick, 1500);
+            return;
+          }
+        } else {
+          el.textContent = word.slice(0, ci - 1);
+          ci--;
+          if (ci === 0) {
+            deleting = false;
+            ri = (ri + 1) % roles.length;
+          }
+        }
+        typingTimer = setTimeout(tick, deleting ? 54 : 88);
+      }
+      tick();
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      document.getElementById("theme-btn").textContent = next === "dark" ? "☼" : "☾";
+      localStorage.setItem("ex-theme", next);
+    }
+
+    function initParticles() {
+      const canvas = document.getElementById("particles");
+      const ctx = canvas.getContext("2d");
+      let width;
+      let height;
+      let dots = [];
+      function resize() {
+        const ratio = window.devicePixelRatio || 1;
+        width = canvas.offsetWidth;
+        height = canvas.offsetHeight;
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        dots = Array.from({ length: 86 }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.36,
+          vy: (Math.random() - 0.5) * 0.36,
+          r: Math.random() * 1.7 + 0.5
+        }));
+      }
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        const dark = document.documentElement.getAttribute("data-theme") === "dark";
+        const color = dark ? "226,139,78" : "199,109,52";
+        dots.forEach(dot => {
+          dot.x += dot.vx;
+          dot.y += dot.vy;
+          if (dot.x < 0) dot.x = width;
+          if (dot.x > width) dot.x = 0;
+          if (dot.y < 0) dot.y = height;
+          if (dot.y > height) dot.y = 0;
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, dot.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${color},0.42)`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      window.addEventListener("resize", resize);
+      resize();
+      draw();
+    }
+
+    function initReveal() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll(".reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group").forEach(el => observer.observe(el));
+    }
+
+    function sendMsg() {
+      const name = document.getElementById("f-name").value.trim();
+      const email = document.getElementById("f-email").value.trim();
+      const msg = document.getElementById("f-msg").value.trim();
+      if (!name || !email || !msg) {
+        alert(currentLang === "zh" ? "请先填写姓名、邮箱和留言。" : "Please fill in your name, email, and message.");
+        return;
+      }
+      const subject = encodeURIComponent(`Message from ${name} via portfolio`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+      window.location.href = `mailto:ertongxian@gmail.com?subject=${subject}&body=${body}`;
+    }
+
+    const savedTheme = localStorage.getItem("ex-theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    document.getElementById("theme-btn").textContent = savedTheme === "dark" ? "☼" : "☾";
+    setLang(localStorage.getItem("ex-lang") || "en");
+    document.body.classList.add("js-ready");
+    initParticles();
+    initReveal();
+    setTimeout(() => {
+      document.querySelectorAll(".reveal, .focus-card, .project-card, .tl-item, .edu-card, .skill-group").forEach(el => el.classList.add("visible"));
+    }, 600);
+  </script>
+</body>
 </html>
